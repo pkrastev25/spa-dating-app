@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
+import {AlertifyService} from '../services/alertify.service';
 
 /**
  * Component responsible for rendering a navigation bar.
@@ -17,8 +18,9 @@ export class NavComponent implements OnInit {
    * Constructor.
    *
    * @param {AuthService} authService Reference to the service
+   * @param {AlertifyService} alertifyService Reference to the service
    */
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private alertifyService: AlertifyService) {
   }
 
   // region LIFECYCLE
@@ -29,34 +31,35 @@ export class NavComponent implements OnInit {
   // endregion LIFECYCLE
 
   /**
-   * Logs in the user with the help of the {@link AuthService}.
+   * Logs in the user with the help of the {@link AuthService}. User feedback
+   * is given with the help of {@link AlertifyService}.
    */
   login() {
     this.authService.login(this.model).subscribe(data => {
-      console.log('Logged in successfully');
+      this.alertifyService.success('Logged in successfully');
     }, error => {
-      console.log(error);
+      this.alertifyService.error(error);
     });
   }
 
   /**
-   * Logs out the currently logged in user.
+   * Logs out the currently logged in user. User feedback is given with
+   * the help of {@link AlertifyService}.
    */
   logout() {
     this.authService.userToken = null;
     localStorage.removeItem('token');
-    console.log('Logged out');
+    this.alertifyService.message('Logged out');
   }
 
   /**
-   * Validates if there is a logged in user.
+   * Checks if there is a logged in user by validating the current JWT
+   * token.
    *
-   * @returns {boolean} True if the user is currently logged in, false otherwise
+   * @returns {boolean} True if the JWT token is valid, false otherwise
    */
   loggedIn() {
-    const token = localStorage.getItem('token');
-
-    return !!token;
+    return this.authService.loggedIn();
   }
 
 }

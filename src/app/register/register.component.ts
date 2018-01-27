@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AuthService} from '../services/auth.service';
+import {AlertifyService} from '../services/alertify.service';
 
 /**
  * Component responsible for rendering a registration form.
@@ -18,8 +19,9 @@ export class RegisterComponent implements OnInit {
    * Constructor.
    *
    * @param {AuthService} authService Reference to the service
+   * @param {AlertifyService} alertifyService Reference to the service
    */
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private alertifyService: AlertifyService) {
   }
 
   // region LIFECYCLE
@@ -30,13 +32,14 @@ export class RegisterComponent implements OnInit {
   // endregion LIFECYCLE
 
   /**
-   * Registers the user with the help of {@link AuthService}.
+   * Registers the user with the help of {@link AuthService}. User feedback
+   * is given with the help of {@link AlertifyService}.
    */
   register() {
     this.authService.register(this.model).subscribe(() => {
-      console.log('Registration successful!');
+      this.alertifyService.success('Registration successful!');
     }, error => {
-      console.log(error);
+      this.alertifyService.error(error);
     });
   }
 
@@ -45,7 +48,6 @@ export class RegisterComponent implements OnInit {
    */
   cancel() {
     this.cancelRegister.emit(false);
-    console.log('Cancelled');
   }
 
 }
