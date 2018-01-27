@@ -6,11 +6,17 @@ import {AppComponent} from './app.component';
 import {HttpModule} from '@angular/http';
 import {NavComponent} from './nav/nav.component';
 import {FormsModule} from '@angular/forms';
-import {AuthService} from './services/auth.service';
+import {AuthService} from './_services/auth.service';
 import {HomeComponent} from './home/home.component';
 import {RegisterComponent} from './register/register.component';
-import {AlertifyService} from './services/alertify.service';
+import {AlertifyService} from './_services/alertify.service';
 import {BsDropdownModule} from 'ngx-bootstrap';
+import {MemberListComponent} from './member-list/member-list.component';
+import {ListsComponent} from './lists/lists.component';
+import {MessagesComponent} from './messages/messages.component';
+import {RouterModule} from '@angular/router';
+import {appRoutes} from './routes';
+import {AuthGuard} from './_guards/auth.guard';
 
 
 @NgModule({
@@ -18,17 +24,22 @@ import {BsDropdownModule} from 'ngx-bootstrap';
     AppComponent,
     NavComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    MemberListComponent,
+    ListsComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [
     AuthService,
-    AlertifyService
+    AlertifyService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

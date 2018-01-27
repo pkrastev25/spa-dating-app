@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../services/auth.service';
-import {AlertifyService} from '../services/alertify.service';
+import {AuthService} from '../_services/auth.service';
+import {AlertifyService} from '../_services/alertify.service';
+import {Router} from '@angular/router';
 
 /**
  * Component responsible for rendering a navigation bar.
@@ -19,8 +20,9 @@ export class NavComponent implements OnInit {
    *
    * @param {AuthService} authService Reference to the service
    * @param {AlertifyService} alertifyService Reference to the service
+   * @param {Router} router Reference to the service
    */
-  constructor(private authService: AuthService, private alertifyService: AlertifyService) {
+  constructor(private authService: AuthService, private alertifyService: AlertifyService, private router: Router) {
   }
 
   // region LIFECYCLE
@@ -32,24 +34,28 @@ export class NavComponent implements OnInit {
 
   /**
    * Logs in the user with the help of the {@link AuthService}. User feedback
-   * is given with the help of {@link AlertifyService}.
+   * is given with the help of {@link AlertifyService}. Reroutes the user
+   * accordingly.
    */
   login() {
     this.authService.login(this.model).subscribe(data => {
       this.alertifyService.success('Logged in successfully');
     }, error => {
-      this.alertifyService.error(error);
+      this.alertifyService.error('Failed to login!');
+    }, () => {
+      this.router.navigate(['/members']);
     });
   }
 
   /**
    * Logs out the currently logged in user. User feedback is given with
-   * the help of {@link AlertifyService}.
+   * the help of {@link AlertifyService}. Reroutes the user accordingly.
    */
   logout() {
     this.authService.userToken = null;
     localStorage.removeItem('token');
     this.alertifyService.message('Logged out');
+    this.router.navigate(['/home']);
   }
 
   /**

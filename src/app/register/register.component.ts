@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {AuthService} from '../services/auth.service';
-import {AlertifyService} from '../services/alertify.service';
+import {AuthService} from '../_services/auth.service';
+import {AlertifyService} from '../_services/alertify.service';
 
 /**
  * Component responsible for rendering a registration form.
