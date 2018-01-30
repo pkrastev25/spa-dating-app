@@ -50,6 +50,19 @@ export class UserService {
   }
 
   /**
+   * Performs an API request which updates the user data,
+   *
+   * @param {number} id The id of the user
+   * @param {UserModel} user The update user information
+   * @returns {Observable<any | any>} The result of the request
+   */
+  updateUser(id: number, user: UserModel) {
+    return this.authHttp
+      .put(this.baseUrl + 'users/' + id, user)
+      .catch(this.handleError);
+  }
+
+  /**
    * Handles errors from the API calls by converting them to a more user friendly
    * format.
    *

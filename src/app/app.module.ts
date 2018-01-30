@@ -24,6 +24,9 @@ import {MemberDetailComponent} from './members/member-detail/member-detail.compo
 import {MemberDetailResolver} from './_resolvers/member-detail.resolver';
 import {MemberListResolver} from './_resolvers/member-list.resolver';
 import {NgxGalleryModule} from 'ngx-gallery';
+import {MemberEditComponent} from './members/member-edit/member-edit.component';
+import {MemberEditResolver} from './_resolvers/member-edit.resolver';
+import {PreventUnsavedChangesGuard} from './_guards/prevent-unsaved-changes.guard';
 
 
 @NgModule({
@@ -36,7 +39,8 @@ import {NgxGalleryModule} from 'ngx-gallery';
     ListsComponent,
     MessagesComponent,
     MemberCardComponent,
-    MemberDetailComponent
+    MemberDetailComponent,
+    MemberEditComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,9 @@ import {NgxGalleryModule} from 'ngx-gallery';
     UserService,
     AuthGuard,
     MemberDetailResolver,
-    MemberListResolver
+    MemberListResolver,
+    MemberEditResolver,
+    PreventUnsavedChangesGuard
   ],
   bootstrap: [AppComponent]
 })
