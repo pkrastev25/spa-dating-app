@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import {AuthHttp} from 'angular2-jwt';
+import {PhotoModel} from '../_models/PhotoModel';
 
 /**
  * Service responsible for managing user data.
@@ -39,12 +40,12 @@ export class UserService {
    * Performs an API request which retrieves the information
    * for a specific user.
    *
-   * @param {number} id The id of the user
+   * @param {number} userId The id of the user
    * @returns {Observable<UserModel>} The information for the specific user
    */
-  getUser(id: number): Observable<UserModel> {
+  getUser(userId: number): Observable<UserModel> {
     return this.authHttp
-      .get(this.baseUrl + 'users/' + id)
+      .get(this.baseUrl + 'users/' + userId)
       .map(response => <UserModel>response.json())
       .catch(this.handleError);
   }
@@ -52,13 +53,25 @@ export class UserService {
   /**
    * Performs an API request which updates the user data,
    *
-   * @param {number} id The id of the user
+   * @param {number} userId The id of the user
    * @param {UserModel} user The update user information
    * @returns {Observable<any | any>} The result of the request
    */
-  updateUser(id: number, user: UserModel) {
+  updateUser(userId: number, user: UserModel) {
     return this.authHttp
-      .put(this.baseUrl + 'users/' + id, user)
+      .put(this.baseUrl + 'users/' + userId, user)
+      .catch(this.handleError);
+  }
+
+  setMainPhoto(userId: number, photo: PhotoModel) {
+    return this.authHttp
+      .post(this.baseUrl + 'users/' + userId + '/photos/' + photo.id, photo)
+      .catch(this.handleError);
+  }
+
+  deletePhoto(userId: number, photoId: number) {
+    return this.authHttp
+      .delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId)
       .catch(this.handleError);
   }
 

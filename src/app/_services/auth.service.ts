@@ -5,6 +5,8 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import {Observable} from 'rxjs/Observable';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
+import {UserModel} from '../_models/UserModel';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 /**
  * Service responsible for managing the authentication process like login
@@ -16,7 +18,11 @@ export class AuthService {
   baseUrl = 'http://localhost:5000/api/auth/';
   userToken: any;
   decodedToken: any;
+  currentUser: UserModel;
   jwtHelper: JwtHelper = new JwtHelper();
+
+  private photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  currentPhotoUrl = this.photoUrl.asObservable();
 
   /**
    * Constructor.
@@ -41,8 +47,11 @@ export class AuthService {
 
         if (user && user.tokenString) {
           localStorage.setItem('token', user.tokenString);
+          localStorage.setItem('user', JSON.stringify(user.user));
           this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
           this.userToken = user.tokenString;
+          this.currentUser = user.user;
+          this.changeMemberPhoto(this.currentUser.photoUrl);
         }
       }).catch(this.handleError);
   }
@@ -65,6 +74,10 @@ export class AuthService {
    */
   loggedIn() {
     return tokenNotExpired('token');
+  }
+
+  changeMemberPhoto(photoUrl: string) {
+    this.photoUrl.next(photoUrl);
   }
 
   /**

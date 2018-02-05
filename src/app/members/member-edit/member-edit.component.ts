@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {UserModel} from '../../_models/UserModel';
 import {ActivatedRoute} from '@angular/router';
 import {AlertifyService} from '../../_services/alertify.service';
@@ -22,6 +22,7 @@ export class MemberEditComponent implements OnInit {
    * Provides a reference to the form.
    */
   @ViewChild('editForm') editForm: NgForm;
+  photoUrl: string;
 
   /**
    * Constructor.
@@ -42,6 +43,7 @@ export class MemberEditComponent implements OnInit {
     this.routeService.data.subscribe(data => {
       this.user = data['user'];
     });
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   // endregion LIFECYCLE
@@ -58,6 +60,10 @@ export class MemberEditComponent implements OnInit {
       }, error => {
         this.alertifyService.error(error);
       });
+  }
+
+  updateMainPhoto(photoUrl) {
+    this.user.photoUrl = photoUrl;
   }
 
 }

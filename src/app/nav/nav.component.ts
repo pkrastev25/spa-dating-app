@@ -14,6 +14,7 @@ import {Router} from '@angular/router';
 export class NavComponent implements OnInit {
 
   model: any = {};
+  photoUrl: string;
 
   /**
    * Constructor.
@@ -28,6 +29,7 @@ export class NavComponent implements OnInit {
   // region LIFECYCLE
 
   ngOnInit() {
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   // endregion LIFECYCLE
@@ -53,7 +55,9 @@ export class NavComponent implements OnInit {
    */
   logout() {
     this.authService.userToken = null;
+    this.authService.currentUser = null;
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.alertifyService.message('Logged out');
     this.router.navigate(['/home']);
   }

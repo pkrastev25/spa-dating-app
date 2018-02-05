@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './_services/auth.service';
 import {JwtHelper} from 'angular2-jwt';
+import {UserModel} from './_models/UserModel';
 
 @Component({
   selector: 'app-root',
@@ -29,9 +30,15 @@ export class AppComponent implements OnInit {
      * even after a refresh of the page.
      */
     const token = localStorage.getItem('token');
+    const user: UserModel = JSON.parse(localStorage.getItem('user'));
 
     if (token) {
       this.authService.decodedToken = this.jwtHelper.decodeToken(token);
+    }
+
+    if (user) {
+      this.authService.currentUser = user;
+      this.authService.changeMemberPhoto(user.photoUrl);
     }
   }
 
