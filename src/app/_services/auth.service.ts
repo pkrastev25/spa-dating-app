@@ -51,7 +51,12 @@ export class AuthService {
           this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
           this.userToken = user.tokenString;
           this.currentUser = user.user;
-          this.changeMemberPhoto(this.currentUser.photoUrl);
+
+          if (this.currentUser.photoUrl !== null) {
+            this.changeMemberPhoto(this.currentUser.photoUrl);
+          } else {
+            this.changeMemberPhoto('../../assets/user.png');
+          }
         }
       }).catch(this.handleError);
   }
@@ -59,11 +64,12 @@ export class AuthService {
   /**
    * Performs an API call for the registration of the user.
    *
-   * @param model Contains the user data - user name and password
+   * @param user Contains the user data - user name and password
    * @returns {Observable<Response>} Contains the result of the API call
    */
-  register(model: any) {
-    return this.http.post(this.baseUrl + 'register', model, this.requestOptions())
+  register(user: UserModel) {
+    return this.http
+      .post(this.baseUrl + 'register', user, this.requestOptions())
       .catch(this.handleError);
   }
 

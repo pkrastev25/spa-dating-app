@@ -10,7 +10,6 @@ import {UserModel} from './_models/UserModel';
 })
 export class AppComponent implements OnInit {
 
-  title = 'app';
   jwtHelper: JwtHelper = new JwtHelper();
 
   /**
@@ -38,7 +37,12 @@ export class AppComponent implements OnInit {
 
     if (user) {
       this.authService.currentUser = user;
-      this.authService.changeMemberPhoto(user.photoUrl);
+
+      if (this.authService.currentUser.photoUrl !== null) {
+        this.authService.changeMemberPhoto(user.photoUrl);
+      } else {
+        this.authService.changeMemberPhoto('../assets/user.png');
+      }
     }
   }
 
