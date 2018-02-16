@@ -31,12 +31,18 @@ export class UserService {
    *
    * @returns {Observable<UserModel[]>} The user data
    */
-  getUsers(page?: number, itemsPerPage?: number, userParams?: any) {
+  getUsers(page?: number, itemsPerPage?: number, userParams?: any, likesParam?: string) {
     const paginatedResult: PaginatedResultModel<UserModel[]> = new PaginatedResultModel<UserModel[]>();
     let queryString = '?';
 
     if (page != null && itemsPerPage != null) {
       queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
+    }
+
+    if (likesParam === 'Likers') {
+      queryString += 'Likers=true&';
+    } else if (likesParam === 'Likees') {
+      queryString += 'Likees=true&';
     }
 
     if (userParams != null) {
@@ -97,6 +103,12 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  sendLike(userId: number, recipientId: number) {
+    return this.authHttp
+      .post(this.baseUrl + 'users/' + userId + '/like/' + recipientId, {})
+      .catch(this.handleError);
+  }
+
   /**
    * Handles errors from the API calls by converting them to a more user friendly
    * format.
@@ -105,6 +117,10 @@ export class UserService {
    * @returns {ErrorObservable} A more user friendly format for the error
    */
   private handleError(error: any) {
+    if (error.status === 400) {
+      return Observable.throw(error._body);
+    }
+
     const applicationError = error.headers.get('Application-Error');
 
     if (applicationError) {

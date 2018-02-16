@@ -30,6 +30,7 @@ import {PreventUnsavedChangesGuard} from './_guards/prevent-unsaved-changes.guar
 import {PhotoEditorComponent} from './photo-editor/photo-editor.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import {ListResolver} from './_resolvers/list.resolver';
 
 
 @NgModule({
@@ -70,7 +71,8 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     MemberDetailResolver,
     MemberListResolver,
     MemberEditResolver,
-    PreventUnsavedChangesGuard
+    PreventUnsavedChangesGuard,
+    ListResolver
   ],
   bootstrap: [AppComponent]
 })
