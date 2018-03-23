@@ -31,6 +31,8 @@ import {PhotoEditorComponent} from './photo-editor/photo-editor.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import {ListResolver} from './_resolvers/list.resolver';
+import {MessageResolver} from './_resolvers/message.resolver';
+import {MemberMessagesComponent} from './members/member-messages/member-messages.component';
 
 
 @NgModule({
@@ -46,7 +48,8 @@ import {ListResolver} from './_resolvers/list.resolver';
     MemberDetailComponent,
     MemberEditComponent,
     PhotoEditorComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    MemberMessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +75,8 @@ import {ListResolver} from './_resolvers/list.resolver';
     MemberListResolver,
     MemberEditResolver,
     PreventUnsavedChangesGuard,
-    ListResolver
+    ListResolver,
+    MessageResolver
   ],
   bootstrap: [AppComponent]
 })

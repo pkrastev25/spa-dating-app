@@ -9,6 +9,7 @@ import {AuthHttp} from 'angular2-jwt';
 import {PhotoModel} from '../_models/PhotoModel';
 import {PaginatedResultModel} from '../_models/PaginatedResultModel';
 import {Response} from '@angular/http';
+import {IMessageModel} from "../_models/IMessageModel";
 
 /**
  * Service responsible for managing user data.
@@ -107,6 +108,57 @@ export class UserService {
     return this.authHttp
       .post(this.baseUrl + 'users/' + userId + '/like/' + recipientId, {})
       .catch(this.handleError);
+  }
+
+  getMessages(userId: number, page?: number, itemsPerPage?: number, messageContainer?: string) {
+    const paginatedResult: PaginatedResultModel<IMessageModel[]> = new PaginatedResultModel();
+    let queryString = '?MessageContainer' + messageContainer;
+
+    if (page != null && itemsPerPage != null) {
+      queryString += '&pageNumber=' + page + '&pageSize' + itemsPerPage;
+    }
+
+    return this.authHttp
+      .get(this.baseUrl + 'users/' + userId + '/messages' + queryString)
+      .map((response: Response) => {
+        paginatedResult.result = response.json();
+
+        if (response.headers.get('Pagination') != null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+
+        return paginatedResult;
+      }).catch(this.handleError);
+  }
+
+  getMessageThread(userId: number, recipientId: number) {
+    return this.authHttp
+      .get(this.baseUrl + 'users/' + userId + '/messages/thread/' + recipientId)
+      .map((response: Response) => {
+        return response.json();
+      }).catch(this.handleError);
+  }
+
+  sendMessage(userId: number, message: IMessageModel) {
+    return this.authHttp
+      .post(this.baseUrl + 'users/' + userId + '/messages', message)
+      .map((response: Response) => {
+        return response.json();
+      }).catch(this.handleError);
+  }
+
+  deleteMessage(messageId: number, userId: number) {
+    return this.authHttp
+      .post(this.baseUrl + 'users/' + userId + '/messages/' + messageId, {})
+      .map(response => {
+      })
+      .catch(this.handleError);
+  }
+
+  markMessageAsRead(userId: number, messageId: number) {
+    this.authHttp
+      .post(this.baseUrl + 'users/' + userId + '/messages/' + messageId + '/read', {})
+      .subscribe();
   }
 
   /**
