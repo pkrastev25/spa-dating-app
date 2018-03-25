@@ -1,13 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {IMessageModel} from '../_models/IMessageModel';
-import {IPaginationModel} from '../_models/PaginationModel';
-import {UserService} from '../_services/user.service';
-import {AlertifyService} from '../_services/alertify.service';
+import {IMessageModel} from '../../_models/IMessageModel';
+import {IPaginationModel} from '../../_models/IPaginationModel';
+import {UserService} from '../../_services/user.service';
+import {AlertifyService} from '../../_services/alertify.service';
 import {ActivatedRoute} from '@angular/router';
-import {AuthService} from '../_services/auth.service';
-import {PaginatedResultModel} from '../_models/PaginatedResultModel';
-import _ = require('underscore');
+import {AuthService} from '../../_services/auth.service';
+import {PaginatedResultModel} from '../../_models/PaginatedResultModel';
+import * as _ from 'underscore';
 
+/**
+ * @author Petar Krastev
+ */
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
@@ -64,5 +67,4 @@ export class MessagesComponent implements OnInit {
     this.pagination.currentPage = event.page;
     this.loadMessages();
   }
-
 }

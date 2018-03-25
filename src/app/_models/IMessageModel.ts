@@ -1,3 +1,6 @@
+/**
+ * @author Petar Krastev
+ */
 export interface IMessageModel {
   id: number;
   senderId: number;

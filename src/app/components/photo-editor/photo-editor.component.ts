@@ -1,12 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {PhotoModel} from '../_models/PhotoModel';
+import {IPhotoModel} from '../../_models/IPhotoModel';
 import {FileUploader} from 'ng2-file-upload';
-import {environment} from '../../environments/environment';
-import {AuthService} from '../_services/auth.service';
-import {UserService} from '../_services/user.service';
-import {AlertifyService} from '../_services/alertify.service';
-import _ = require('underscore');
+import {environment} from '../../../environments/environment';
+import {AuthService} from '../../_services/auth.service';
+import {UserService} from '../../_services/user.service';
+import {AlertifyService} from '../../_services/alertify.service';
+import * as _ from 'underscore';
 
+/**
+ * @author Petar Krastev
+ */
 @Component({
   selector: 'app-photo-editor',
   templateUrl: './photo-editor.component.html',
@@ -14,24 +17,21 @@ import _ = require('underscore');
 })
 export class PhotoEditorComponent implements OnInit {
 
-  @Input() photos: PhotoModel[];
+  @Input() photos: IPhotoModel[];
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
   baseUrl = environment.apiUrl;
-  currentMainPhoto: PhotoModel;
+  currentMainPhoto: IPhotoModel;
   @Output() getMemberPhotoChange = new EventEmitter<string>();
 
-  constructor(private authService: AuthService, private userService: UserService,
+  constructor(private authService: AuthService,
+              private userService: UserService,
               private alertifyService: AlertifyService) {
   }
-
-  // region LIFECYCLE
 
   ngOnInit() {
     this.initializeUploader();
   }
-
-  // endregion LIFECYCLE
 
   public fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
@@ -50,8 +50,8 @@ export class PhotoEditorComponent implements OnInit {
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       if (response) {
-        const result: PhotoModel = JSON.parse(response);
-        const photo: PhotoModel = {
+        const result: IPhotoModel = JSON.parse(response);
+        const photo: IPhotoModel = {
           id: result.id,
           url: result.url,
           dateAdded: result.dateAdded,
@@ -69,7 +69,7 @@ export class PhotoEditorComponent implements OnInit {
     };
   }
 
-  setMainPhoto(photo: PhotoModel) {
+  setMainPhoto(photo: IPhotoModel) {
     this.userService.setMainPhoto(
       this.authService.decodedToken.nameid,
       photo
@@ -100,5 +100,4 @@ export class PhotoEditorComponent implements OnInit {
         });
       });
   }
-
 }

@@ -1,12 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {UserModel} from '../_models/UserModel';
-import {IPaginationModel} from '../_models/PaginationModel';
-import {UserService} from '../_services/user.service';
-import {AlertifyService} from '../_services/alertify.service';
-import {AuthService} from '../_services/auth.service';
+import {IUserModel} from '../../_models/IUserModel';
+import {IPaginationModel} from '../../_models/IPaginationModel';
+import {UserService} from '../../_services/user.service';
+import {AlertifyService} from '../../_services/alertify.service';
+import {AuthService} from '../../_services/auth.service';
 import {ActivatedRoute} from '@angular/router';
-import {PaginatedResultModel} from '../_models/PaginatedResultModel';
+import {PaginatedResultModel} from '../../_models/PaginatedResultModel';
 
+/**
+ * @author Petar Krastev
+ */
 @Component({
   selector: 'app-lists',
   templateUrl: './lists.component.html',
@@ -14,7 +17,7 @@ import {PaginatedResultModel} from '../_models/PaginatedResultModel';
 })
 export class ListsComponent implements OnInit {
 
-  users: UserModel[];
+  users: IUserModel[];
   pagination: IPaginationModel;
   likesParam: string;
 
@@ -35,7 +38,7 @@ export class ListsComponent implements OnInit {
   loadUsers() {
     this.userService
       .getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, null, this.likesParam)
-      .subscribe((res: PaginatedResultModel<UserModel[]>) => {
+      .subscribe((res: PaginatedResultModel<IUserModel[]>) => {
         this.users = res.result;
         this.pagination = res.pagination;
       }, error => {
@@ -47,5 +50,4 @@ export class ListsComponent implements OnInit {
     this.pagination.currentPage = event.page;
     this.loadUsers();
   }
-
 }

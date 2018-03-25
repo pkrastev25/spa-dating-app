@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './_services/auth.service';
-import {JwtHelper} from 'angular2-jwt';
-import {UserModel} from './_models/UserModel';
+import {IUserModel} from './_models/IUserModel';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
+/**
+ * @author Petar Krastev
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,29 +13,16 @@ import {UserModel} from './_models/UserModel';
 })
 export class AppComponent implements OnInit {
 
-  jwtHelper: JwtHelper = new JwtHelper();
-
-  /**
-   * Constructor.
-   *
-   * @param {AuthService} authService Reference to the service
-   */
-  constructor(private authService: AuthService) {
-
+  constructor(private authService: AuthService,
+              private jwtHelperService: JwtHelperService) {
   }
 
-  // region LIFECYCLE
-
   ngOnInit(): void {
-    /*
-     * Place the token in the auth service, so that there is access to it
-     * even after a refresh of the page.
-     */
     const token = localStorage.getItem('token');
-    const user: UserModel = JSON.parse(localStorage.getItem('user'));
+    const user: IUserModel = JSON.parse(localStorage.getItem('user'));
 
     if (token) {
-      this.authService.decodedToken = this.jwtHelper.decodeToken(token);
+      this.authService.decodedToken = this.jwtHelperService.decodeToken(token);
     }
 
     if (user) {
@@ -45,6 +35,4 @@ export class AppComponent implements OnInit {
       }
     }
   }
-
-  // endregion LIFECYCLE
 }

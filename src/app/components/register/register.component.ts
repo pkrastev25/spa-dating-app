@@ -1,13 +1,13 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {AuthService} from '../_services/auth.service';
-import {AlertifyService} from '../_services/alertify.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsDatepickerConfig} from 'ngx-bootstrap';
-import {UserModel} from '../_models/UserModel';
 import {Router} from '@angular/router';
+import {IUserModel} from '../../_models/IUserModel';
+import {AuthService} from '../../_services/auth.service';
+import {AlertifyService} from '../../_services/alertify.service';
 
 /**
- * Component responsible for rendering a registration form.
+ * @author Petar Krastev
  */
 @Component({
   selector: 'app-register',
@@ -17,22 +17,15 @@ import {Router} from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   @Output() cancelRegister = new EventEmitter();
-  user: UserModel;
+  user: IUserModel;
   registerForm: FormGroup;
   bsConfig: Partial<BsDatepickerConfig>;
 
-
-  /**
-   * Constructor.
-   *
-   * @param {AuthService} authService Reference to the service
-   * @param {AlertifyService} alertifyService Reference to the service
-   */
-  constructor(private authService: AuthService, private alertifyService: AlertifyService,
-              private formBuilderService: FormBuilder, private routerService: Router) {
+  constructor(private authService: AuthService,
+              private alertifyService: AlertifyService,
+              private formBuilderService: FormBuilder,
+              private routerService: Router) {
   }
-
-  // region LIFECYCLE
 
   ngOnInit() {
     this.bsConfig = {
@@ -40,8 +33,6 @@ export class RegisterComponent implements OnInit {
     };
     this.createRegisterForm();
   }
-
-  // endregion LIFECYCLE
 
   createRegisterForm() {
     this.registerForm = this.formBuilderService.group({
@@ -61,10 +52,6 @@ export class RegisterComponent implements OnInit {
       ? null : {'mismatch': true};
   }
 
-  /**
-   * Registers the user with the help of {@link AuthService}. User feedback
-   * is given with the help of {@link AlertifyService}.
-   */
   register() {
     if (this.registerForm.valid) {
       this.user = Object.assign({}, this.registerForm.value);
@@ -84,11 +71,7 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  /**
-   * Cancels the registration process, hides the registration form.
-   */
   cancel() {
     this.cancelRegister.emit(false);
   }
-
 }

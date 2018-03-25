@@ -8,6 +8,9 @@ import 'rxjs/add/observable/of';
 import {IMessageModel} from '../_models/IMessageModel';
 import {AuthService} from '../_services/auth.service';
 
+/**
+ * @author Petar Krastev
+ */
 @Injectable()
 export class MessageResolver implements Resolve<IMessageModel[]> {
 
@@ -15,9 +18,10 @@ export class MessageResolver implements Resolve<IMessageModel[]> {
   pageNumber = 1;
   messageContainer = 'Unread';
 
-  constructor(private userService: UserService, private routerService: Router, private alertifyService: AlertifyService,
+  constructor(private userService: UserService,
+              private routerService: Router,
+              private alertifyService: AlertifyService,
               private authService: AuthService) {
-
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IMessageModel[]> |
@@ -35,5 +39,4 @@ export class MessageResolver implements Resolve<IMessageModel[]> {
         return Observable.of(null);
       });
   }
-
 }

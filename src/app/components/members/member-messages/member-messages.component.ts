@@ -1,11 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IMessageModel} from '../../_models/IMessageModel';
-import {UserService} from '../../_services/user.service';
-import {AuthService} from '../../_services/auth.service';
-import {AlertifyService} from '../../_services/alertify.service';
+import {IMessageModel} from '../../../_models/IMessageModel';
+import {UserService} from '../../../_services/user.service';
+import {AuthService} from '../../../_services/auth.service';
+import {AlertifyService} from '../../../_services/alertify.service';
 import 'rxjs/add/operator/do';
 import * as _ from 'underscore';
 
+/**
+ * @author Petar Krastev
+ */
 @Component({
   selector: 'app-member-messages',
   templateUrl: './member-messages.component.html',
@@ -58,5 +61,4 @@ export class MemberMessagesComponent implements OnInit {
       this.alertifyService.error(error);
     });
   }
-
 }

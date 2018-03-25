@@ -1,12 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {UserModel} from '../../_models/UserModel';
-import {AuthService} from '../../_services/auth.service';
-import {UserService} from '../../_services/user.service';
-import {AlertifyService} from '../../_services/alertify.service';
+import {IUserModel} from '../../../_models/IUserModel';
+import {AuthService} from '../../../_services/auth.service';
+import {UserService} from '../../../_services/user.service';
+import {AlertifyService} from '../../../_services/alertify.service';
 
 /**
- * Component responsible for rendering a user card - user photo, nickname
- * and navigational buttons for further options.
+ * @author Petar Krastev
  */
 @Component({
   selector: 'app-member-card',
@@ -15,22 +14,15 @@ import {AlertifyService} from '../../_services/alertify.service';
 })
 export class MemberCardComponent implements OnInit {
 
-  @Input() user: UserModel;
+  @Input() user: IUserModel;
 
-  /**
-   * Constructor.
-   */
   constructor(private authService: AuthService,
               private userService: UserService,
               private alertifyService: AlertifyService) {
   }
 
-  // region LIFECYCLE
-
   ngOnInit() {
   }
-
-  // endregion LIFECYCLE
 
   sendLike(recipientId: number) {
     this.userService
@@ -41,5 +33,4 @@ export class MemberCardComponent implements OnInit {
         this.alertifyService.error(error);
       });
   }
-
 }

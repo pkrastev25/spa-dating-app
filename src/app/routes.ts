@@ -1,27 +1,23 @@
 import {Routes} from '@angular/router';
-import {HomeComponent} from './home/home.component';
-import {MemberListComponent} from './members/member-list/member-list.component';
-import {MessagesComponent} from './messages/messages.component';
-import {ListsComponent} from './lists/lists.component';
+import {HomeComponent} from './components/home/home.component';
+import {MemberListComponent} from './components/members/member-list/member-list.component';
+import {MessagesComponent} from './components/messages/messages.component';
+import {ListsComponent} from './components/lists/lists.component';
 import {AuthGuard} from './_guards/auth.guard';
-import {MemberDetailComponent} from './members/member-detail/member-detail.component';
+import {MemberDetailComponent} from './components/members/member-detail/member-detail.component';
 import {MemberDetailResolver} from './_resolvers/member-detail.resolver';
 import {MemberListResolver} from './_resolvers/member-list.resolver';
-import {MemberEditComponent} from './members/member-edit/member-edit.component';
+import {MemberEditComponent} from './components/members/member-edit/member-edit.component';
 import {MemberEditResolver} from './_resolvers/member-edit.resolver';
 import {PreventUnsavedChangesGuard} from './_guards/prevent-unsaved-changes.guard';
 import {ListResolver} from './_resolvers/list.resolver';
 import {MessageResolver} from './_resolvers/message.resolver';
 
 /**
- * Specifies all routes within the application.
+ * @author Petar Krastev
  */
 export const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
-  /*
-   * Parent route for all restricted routes. Eliminates the
-   * need of boiler plate code.
-   */
   {
     path: '',
     runGuardsAndResolvers: 'always',
@@ -39,6 +35,5 @@ export const appRoutes: Routes = [
       {path: 'lists', component: ListsComponent, resolve: {users: ListResolver}},
     ]
   },
-  // Default route for the application, should be at the bottom!
   {path: '**', redirectTo: 'home', pathMatch: 'full'}
 ];

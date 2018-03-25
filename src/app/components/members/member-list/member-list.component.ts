@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {UserModel} from '../../_models/UserModel';
+import {IUserModel} from '../../../_models/IUserModel';
 import {ActivatedRoute} from '@angular/router';
-import {IPaginationModel} from '../../_models/PaginationModel';
-import {UserService} from '../../_services/user.service';
-import {PaginatedResultModel} from '../../_models/PaginatedResultModel';
-import {AlertifyService} from '../../_services/alertify.service';
+import {IPaginationModel} from '../../../_models/IPaginationModel';
+import {UserService} from '../../../_services/user.service';
+import {PaginatedResultModel} from '../../../_models/PaginatedResultModel';
+import {AlertifyService} from '../../../_services/alertify.service';
 
 /**
- * Component responsible for rendering a list of {@link MemberCardComponent}s
- * which represents the users.
+ * @author Petar Krastev
  */
 @Component({
   selector: 'app-member-list',
@@ -17,23 +16,21 @@ import {AlertifyService} from '../../_services/alertify.service';
 })
 export class MemberListComponent implements OnInit {
 
-  users: UserModel[];
+  users: IUserModel[];
   pagination: IPaginationModel;
-  user: UserModel = JSON.parse(localStorage.getItem('user'));
+  user: IUserModel = JSON.parse(localStorage.getItem('user'));
   genderList = [
     {value: 'male', display: 'Males'},
     {value: 'female', display: 'Females'}
   ];
   userParams: any = {};
 
-  constructor(private routerService: ActivatedRoute, private userService: UserService,
+  constructor(private routerService: ActivatedRoute,
+              private userService: UserService,
               private alertifyService: AlertifyService) {
   }
 
-  // region LIFECYCLE
-
   ngOnInit() {
-    // Retrieve the data from the resolver
     this.routerService.data.subscribe(data => {
       this.users = data['users'].result;
       this.pagination = data['users'].pagination;
@@ -45,12 +42,10 @@ export class MemberListComponent implements OnInit {
     this.userParams.orderBy = 'lastActive';
   }
 
-  // endregion LIFECYCLE
-
   loadUsers() {
     this.userService
       .getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
-      .subscribe((response: PaginatedResultModel<UserModel[]>) => {
+      .subscribe((response: PaginatedResultModel<IUserModel[]>) => {
         this.users = response.result;
         this.pagination = response.pagination;
       }, error => {
@@ -69,5 +64,4 @@ export class MemberListComponent implements OnInit {
     this.pagination.currentPage = event.page;
     this.loadUsers();
   }
-
 }

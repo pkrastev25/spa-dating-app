@@ -1,158 +1,122 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs/Observable';
-import {UserModel} from '../_models/UserModel';
+import {IUserModel} from '../_models/IUserModel';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import {AuthHttp} from 'angular2-jwt';
-import {PhotoModel} from '../_models/PhotoModel';
+import {IPhotoModel} from '../_models/IPhotoModel';
 import {PaginatedResultModel} from '../_models/PaginatedResultModel';
-import {Response} from '@angular/http';
-import {IMessageModel} from "../_models/IMessageModel";
+import {IMessageModel} from '../_models/IMessageModel';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 /**
- * Service responsible for managing user data.
+ * @author Petar Krastev
  */
 @Injectable()
 export class UserService {
 
   baseUrl = environment.apiUrl;
 
-  /**
-   * Constructor.
-   *
-   * @param {AuthHttp} authHttp Reference to the authorized http service
-   */
-  constructor(private authHttp: AuthHttp) {
+  constructor(private authHttp: HttpClient) {
   }
 
-  /**
-   * Performs an API request which retrieves the users.
-   *
-   * @returns {Observable<UserModel[]>} The user data
-   */
-  getUsers(page?: number, itemsPerPage?: number, userParams?: any, likesParam?: string) {
-    const paginatedResult: PaginatedResultModel<UserModel[]> = new PaginatedResultModel<UserModel[]>();
-    let queryString = '?';
+  getUsers(page?, itemsPerPage?, userParams?: any, likesParam?: string) {
+    const paginatedResult: PaginatedResultModel<IUserModel[]> = new PaginatedResultModel<IUserModel[]>();
+    let params = new HttpParams();
 
     if (page != null && itemsPerPage != null) {
-      queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
+      params = params.append('pageNumber', page);
+      params = params.append('pageSize', itemsPerPage);
     }
 
     if (likesParam === 'Likers') {
-      queryString += 'Likers=true&';
+      params = params.append('Likers', 'true');
     } else if (likesParam === 'Likees') {
-      queryString += 'Likees=true&';
+      params = params.append('Likees', 'true');
     }
 
     if (userParams != null) {
-      queryString += 'minAge=' + userParams.minAge + '&maxAge=' + userParams.maxAge + '&gender=' + userParams.gender +
-        '&orderBy=' + userParams.orderBy;
+      params = params.append('minAge', userParams.minAge);
+      params = params.append('maxAge', userParams.maxAge);
+      params = params.append('gender', userParams.gender);
+      params = params.append('orderBy', userParams.orderBy);
     }
 
     return this.authHttp
-      .get(this.baseUrl + 'users' + queryString)
-      .map((response: Response) => {
-        paginatedResult.result = response.json();
+      .get<IUserModel[]>(this.baseUrl + 'users', {observe: 'response', params})
+      .map(response => {
+        paginatedResult.result = response.body;
 
         if (response.headers.get('Pagination') != null) {
           paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
         }
 
         return paginatedResult;
-      })
-      .catch(this.handleError);
+      });
   }
 
-  /**
-   * Performs an API request which retrieves the information
-   * for a specific user.
-   *
-   * @param {number} userId The id of the user
-   * @returns {Observable<UserModel>} The information for the specific user
-   */
-  getUser(userId: number): Observable<UserModel> {
+  getUser(userId: number): Observable<IUserModel> {
     return this.authHttp
-      .get(this.baseUrl + 'users/' + userId)
-      .map(response => <UserModel>response.json())
-      .catch(this.handleError);
+      .get<IUserModel>(this.baseUrl + 'users/' + userId);
   }
 
-  /**
-   * Performs an API request which updates the user data,
-   *
-   * @param {number} userId The id of the user
-   * @param {UserModel} user The update user information
-   * @returns {Observable<any | any>} The result of the request
-   */
-  updateUser(userId: number, user: UserModel) {
+  updateUser(userId: number, user: IUserModel) {
     return this.authHttp
-      .put(this.baseUrl + 'users/' + userId, user)
-      .catch(this.handleError);
+      .put(this.baseUrl + 'users/' + userId, user);
   }
 
-  setMainPhoto(userId: number, photo: PhotoModel) {
+  setMainPhoto(userId: number, photo: IPhotoModel) {
     return this.authHttp
-      .post(this.baseUrl + 'users/' + userId + '/photos/' + photo.id, photo)
-      .catch(this.handleError);
+      .post(this.baseUrl + 'users/' + userId + '/photos/' + photo.id, photo);
   }
 
   deletePhoto(userId: number, photoId: number) {
     return this.authHttp
-      .delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId)
-      .catch(this.handleError);
+      .delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId);
   }
 
   sendLike(userId: number, recipientId: number) {
     return this.authHttp
-      .post(this.baseUrl + 'users/' + userId + '/like/' + recipientId, {})
-      .catch(this.handleError);
+      .post(this.baseUrl + 'users/' + userId + '/like/' + recipientId, {});
   }
 
-  getMessages(userId: number, page?: number, itemsPerPage?: number, messageContainer?: string) {
+  getMessages(userId, page?, itemsPerPage?, messageContainer?: string) {
     const paginatedResult: PaginatedResultModel<IMessageModel[]> = new PaginatedResultModel();
-    let queryString = '?MessageContainer' + messageContainer;
+    let params = new HttpParams();
+    params = params.append('MessageContainer', messageContainer);
 
     if (page != null && itemsPerPage != null) {
-      queryString += '&pageNumber=' + page + '&pageSize' + itemsPerPage;
+      params = params.append('pageNumber', page);
+      params = params.append('pageSize', itemsPerPage);
     }
 
     return this.authHttp
-      .get(this.baseUrl + 'users/' + userId + '/messages' + queryString)
-      .map((response: Response) => {
-        paginatedResult.result = response.json();
+      .get<IMessageModel[]>(this.baseUrl + 'users/' + userId + '/messages', {observe: 'response', params})
+      .map(response => {
+        paginatedResult.result = response.body;
 
         if (response.headers.get('Pagination') != null) {
           paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
         }
 
         return paginatedResult;
-      }).catch(this.handleError);
+      });
   }
 
   getMessageThread(userId: number, recipientId: number) {
     return this.authHttp
-      .get(this.baseUrl + 'users/' + userId + '/messages/thread/' + recipientId)
-      .map((response: Response) => {
-        return response.json();
-      }).catch(this.handleError);
+      .get<IMessageModel[]>(this.baseUrl + 'users/' + userId + '/messages/thread/' + recipientId);
   }
 
   sendMessage(userId: number, message: IMessageModel) {
     return this.authHttp
-      .post(this.baseUrl + 'users/' + userId + '/messages', message)
-      .map((response: Response) => {
-        return response.json();
-      }).catch(this.handleError);
+      .post<IMessageModel>(this.baseUrl + 'users/' + userId + '/messages', message);
   }
 
   deleteMessage(messageId: number, userId: number) {
     return this.authHttp
-      .post(this.baseUrl + 'users/' + userId + '/messages/' + messageId, {})
-      .map(response => {
-      })
-      .catch(this.handleError);
+      .post(this.baseUrl + 'users/' + userId + '/messages/' + messageId, {});
   }
 
   markMessageAsRead(userId: number, messageId: number) {
@@ -160,37 +124,4 @@ export class UserService {
       .post(this.baseUrl + 'users/' + userId + '/messages/' + messageId + '/read', {})
       .subscribe();
   }
-
-  /**
-   * Handles errors from the API calls by converting them to a more user friendly
-   * format.
-   *
-   * @param error The error associated with the API call
-   * @returns {ErrorObservable} A more user friendly format for the error
-   */
-  private handleError(error: any) {
-    if (error.status === 400) {
-      return Observable.throw(error._body);
-    }
-
-    const applicationError = error.headers.get('Application-Error');
-
-    if (applicationError) {
-      return Observable.throw(applicationError);
-    }
-
-    const serverError = error.json();
-    let modelStateErrors = '';
-
-    if (serverError) {
-      for (const key in serverError) {
-        if (serverError[key]) {
-          modelStateErrors += serverError[key] + '\n';
-        }
-      }
-    }
-
-    return Observable.throw(modelStateErrors || 'Server error');
-  }
-
 }
