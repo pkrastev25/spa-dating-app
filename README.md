@@ -1,27 +1,44 @@
-# SpaDatingApp
+# spa-dating-app
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.5.
+An Angular 5 based single page application (SPA) used to provide the front-end functionality of a dating website.
 
-## Development server
+## API
+The API consumed by this project can be found in [api-dating-app](https://github.com/pkrastev25/api-dating-app).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Core features
 
-## Code scaffolding
+* Registration and login of users
+* Customizable user profile, together with the ability to upload photos
+* Filtering and sorting functionality of users
+* The ability to like other users
+* Private chat messaging system
+* Appropriate error handling in the form of text and visual graphics
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Dependencies
 
-## Build
+* [Bootstrap](https://getbootstrap.com/)
+* [Font Awesome](https://fontawesome.com/)
+* [AlertifyJS](http://alertifyjs.com/)
+* [NGX Bootstrap](https://github.com/valor-software/ngx-bootstrap)
+* [Bootswatch](https://bootswatch.com/)
+* [UnderscoreJS](http://underscorejs.org/#)
+* [NGX Gallery](https://www.npmjs.com/package/ngx-gallery)
+* [NG File Upload](https://github.com/valor-software/ng2-file-upload)
+* [Time Ago Pipe](https://www.npmjs.com/package/time-ago-pipe)
+* [Auth0 Angular JWT](https://www.npmjs.com/package/@auth0/angular-jwt)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## License
 
-## Running unit tests
+   Copyright 2018 Petar Krastev
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-## Running end-to-end tests
+   http://www.apache.org/licenses/LICENSE-2.0
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
